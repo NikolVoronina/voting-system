@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voting System</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Выберите партию для голосования</h1>
+    <form id="voteForm">
+      <input type="text" id="code" placeholder="Введите код" required>
+      <button type="button" id="party1">Партия 1</button>
+      <button type="button" id="party2">Партия 2</button>
+      <button type="button" id="party3">Партия 3</button>
+      <button type="button" id="party4">Партия 4</button>
+    </form>
+    <div id="message" class="message"></div>
+    <div id="error" class="error"></div>
+  </div>
+
+  <script>
+    // JavaScript код для отправки голосов и обработки ответа
+    document.getElementById('party1').addEventListener('click', () => vote('Party 1'));
+    document.getElementById('party2').addEventListener('click', () => vote('Party 2'));
+    document.getElementById('party3').addEventListener('click', () => vote('Party 3'));
+    document.getElementById('party4').addEventListener('click', () => vote('Party 4'));
+
+    async function vote(party) {
+      const code = document.getElementById('code').value;
+
+      if (!code) {
+        showMessage('❌ Пожалуйста, введите код.', 'error');
+        return;
+      }
+
+      const response = await fetch('/api/vote', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ partyName: party, code }),
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        showMessage(`✅ Ваш голос за ${party} принят!`, 'message');
+      } else {
+        showMessage(`❌ ${result.error}`, 'error');
+      }
+    }
+
+    function showMessage(message, type) {
+      const messageElement = document.getElementById(type);
+      messageElement.textContent = message;
+    }
+  </script>
+</body>
+</html>
