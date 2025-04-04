@@ -36,7 +36,7 @@ app.post('/api/vote', async (req, res) => {
 
     if (result.rowCount > 0) {
       console.log("Голос успешно зарегистрирован!");
-      return res.json({ message: 'Ваш голос успешно учтен!' });
+      return res.json({ message: 'Stemmen din har blitt tatt i betraktning!' });
     } else {
       console.log("Невозможно найти избирателя с таким кодом и датой рождения.");
       return res.status(400).json({ error: 'Ошибка при голосовании. Пожалуйста, проверьте данные.' });

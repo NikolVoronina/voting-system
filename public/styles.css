@@ -3,10 +3,7 @@
 /* Основные стили для страницы */
 body {
   font-family: "Poppins", sans-serif;
-  background-image: url('images/standard_compressed_stortinget.jpg'); /* Указываем путь к изображению */
-  background-repeat: no-repeat;
-  background-size: cover; /* Изображение будет растягиваться на весь экран */
-  background-position: center; /* Изображение будет выровнено по центру */
+  background-color: #f5eddf;
   margin: 0;
   padding: 0;
   display: flex;
