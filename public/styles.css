@@ -2,81 +2,156 @@
 
 /* Основные стили для страницы */
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f7fc;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-  
-  /* Обёртка для контента */
+  font-family: "Poppins", sans-serif;
+  background-image: url('images/standard_compressed_stortinget.jpg'); /* Указываем путь к изображению */
+  background-repeat: no-repeat;
+  background-size: cover; /* Изображение будет растягиваться на весь экран */
+  background-position: center; /* Изображение будет выровнено по центру */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Исправляем, чтобы контент не был по центру */
+  min-height: 100vh; /* Используем min-height для гибкости */
+  overflow-y: auto; /* Для прокрутки */
+}
+
+/* Обёртка для контента */
+.container {
+  background-color: rgba(255, 255, 255, 0.875);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  margin-top: 5vh; /* Добавляем небольшой отступ сверху */
+}
+
+/* Заголовок */
+h1 {
+  font-size: 24px;
+  color: #333;
+}
+
+/* Стили для формы */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Кнопки для выбора партии */
+button {
+  background-color: #ec0442;
+  color: white;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #52bf7c;
+}
+
+/* Стили для сообщения */
+.message {
+  font-size: 16px;
+  color: #28a745;
+  margin-top: 15px;
+}
+
+.error {
+  color: #dc3545;
+}
+
+input[type="text"] {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+/* Стили для сообщения с ошибкой */
+input.error {
+  border-color: #dc3545;
+}
+
+.img_parties {
+  height: 55px;
+  width: 55px;
+}
+
+.logo_stortinget {
+  height: 120px;
+}
+
+/* Медиазапросы для адаптивности */
+
+/* Для экрана шириной 768px и меньше */
+@media (max-width: 768px) {
   .container {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
+    padding: 15px;
+    max-width: 100%;
   }
-  
-  /* Заголовок */
+
   h1 {
-    font-size: 24px;
-    color: #333;
+    font-size: 20px;
   }
-  
-  /* Стили для формы */
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  /* Кнопки для выбора партии */
+
   button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+    padding: 12px;
+    font-size: 14px;
   }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Стили для сообщения */
-  .message {
-    font-size: 16px;
-    color: #28a745;
-    margin-top: 15px;
-  }
-  
-  .error {
-    color: #dc3545;
-  }
-  
+
   input[type="text"] {
+    font-size: 14px;
+  }
+
+  .img_parties {
+    height: 45px;
+    width: 45px;
+  }
+
+  .logo_stortinget {
+    height: 100px;
+  }
+}
+
+/* Для экрана шириной 480px и меньше */
+@media (max-width: 480px) {
+  .container {
     padding: 10px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+    max-width: 100%;
   }
-  
-  input[type="text"]:focus {
-    outline: none;
-    border-color: #007bff;
+
+  h1 {
+    font-size: 18px;
   }
-  
-  /* Стили для сообщения с ошибкой */
-  input.error {
-    border-color: #dc3545;
+
+  button {
+    padding: 8px;
+    font-size: 12px;
   }
-  
+
+  input[type="text"] {
+    font-size: 14px;
+  }
+
+  .img_parties {
+    height: 40px;
+    width: 40px;
+  }
+
+  .logo_stortinget {
+    height: 80px;
+  }
+}

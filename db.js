@@ -1,17 +1,13 @@
-const { Pool } = require('pg');
+const { Client } = require('pg');
 
-const pool = new Pool({
-  user: 'postgres', // Имя пользователя PostgreSQL
+const client = new Client({
   host: 'localhost',
-  database: 'voting-system', // Имя базы данных
-  password: '1q2w', // Пароль пользователя
-  port: 5432, // Порт PostgreSQL
+  port: 5432,
+  user: 'postgres',
+  password: '1q2w',  
+  database: 'voting-system'
 });
 
-pool.connect()
-  .then(() => console.log('✅ Подключение к базе данных установлено'))
-  .catch(err => console.error('❌ Ошибка подключения к базе данных:', err));
+client.connect();
 
-module.exports = {
-  query: (text, params) => pool.query(text, params),
-};
+module.exports = client;

@@ -1,51 +1,66 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');  // Импортируем CORS
 const db = require('./db'); // Подключение к базе
 
 const app = express();
-const port = 3000;
+const port = 5050;
+
+// Разрешаем CORS только для вашего фронтенда (если он работает на другом порту, например, 3000):
+app.use(cors({
+  origin: 'http://localhost:3000'  // Указываем порт фронтенда (он должен быть на порту 3000)
+}));
 
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
-// Проверка и голосование
+// Маршрут голосования
 app.post('/api/vote', async (req, res) => {
-  const { partyName, voterCode } = req.body;
+  console.log("Получен запрос:", req.body);  // Логируем весь запрос
+  const { voterCode, birthDate, partyName } = req.body;
 
-  if (!partyName || !voterCode) {
-    return res.status(400).json({ error: 'Необходимо указать партию и код' });
+  // Проверяем, что все данные получены
+  if (!voterCode || !birthDate || !partyName) {
+    console.error("Недостаточно данных для голосования.");
+    return res.status(400).json({ error: "Недостаточно данных для голосования" });
   }
+
+  console.log(`Код: ${voterCode}, Дата рождения: ${birthDate}, Партия: ${partyName}`);
 
   try {
-    // Проверяем, есть ли код в базе и не использован ли он
-    const voter = await db.query('SELECT * FROM voters WHERE code = $1 AND used = FALSE', [voterCode]);
+    // Замените запрос на подходящий для вашей базы данных, если нужно
+    const result = await db.query(
+      'UPDATE voters SET party_name = $1 WHERE code = $2 AND birth_date = $3',
+      [partyName, voterCode, birthDate]
+    );
 
-    if (voter.rows.length === 0) {
-      return res.status(403).json({ error: 'Неверный или уже использованный код' });
-    }
-
-    // Проверяем, есть ли партия в базе
-    const party = await db.query('SELECT * FROM votes WHERE party_name = $1', [partyName]);
-
-    if (party.rows.length > 0) {
-      // Обновляем количество голосов
-      await db.query('UPDATE votes SET vote_count = vote_count + 1 WHERE party_name = $1', [partyName]);
+    if (result.rowCount > 0) {
+      console.log("Голос успешно зарегистрирован!");
+      return res.json({ message: 'Ваш голос успешно учтен!' });
     } else {
-      // Добавляем новую партию
-      await db.query('INSERT INTO votes (party_name, vote_count) VALUES ($1, 1)', [partyName]);
+      console.log("Невозможно найти избирателя с таким кодом и датой рождения.");
+      return res.status(400).json({ error: 'Ошибка при голосовании. Пожалуйста, проверьте данные.' });
     }
-
-    // Обновляем код как использованный
-    await db.query('UPDATE voters SET used = TRUE WHERE code = $1', [voterCode]);
-
-    res.status(200).json({ message: `Голос за ${partyName} принят! ✅` });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Ошибка базы данных' });
+    console.error("Ошибка базы данных:", err);
+    return res.status(500).json({ error: 'Ошибка сервера: ' + err.message });
   }
 });
+
+app.get("/api/parties", async (req, res) => {
+  try {
+    const parties = await prisma.votes.findMany({
+      select: { party_name: true },
+    });
+    res.json(parties);
+  } catch (error) {
+    res.status(500).json({ error: "Ошибка при получении партий" });
+  }
+});
+
 
 // Запуск сервера
 app.listen(port, () => {
-  console.log(`Сервер запущен на http://localhost:${port}`);
+  console.log(`✅✅✅✅✅✅ http://localhost:${port}`);
 });
+
