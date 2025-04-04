@@ -1,34 +1,50 @@
-<form id="voteForm">
-  <label for="voterCode">Введите ваш код:</label>
-  <input type="text" id="voterCode" required />
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Голосование</title>
+  <!-- Подключаем свой файл стилей -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Голосование за партии</h1>
+    <form id="voteForm">
+      <label for="voterCode">Введите ваш код:</label>
+      <input type="text" id="voterCode" required />
 
-  <label for="party">Выберите партию:</label>
-  <select id="party">
-    <option value="Партия A">Партия A</option>
-    <option value="Партия B">Партия B</option>
-    <option value="Партия C">Партия C</option>
-    <option value="Партия D">Партия D</option>
-  </select>
+      <label for="party">Выберите партию:</label>
+      <select id="party">
+        <option value="Партия A">Партия A</option>
+        <option value="Партия B">Партия B</option>
+        <option value="Партия C">Партия C</option>
+        <option value="Партия D">Партия D</option>
+      </select>
 
-  <button type="submit">Голосовать</button>
-</form>
+      <button type="submit">Голосовать</button>
+    </form>
 
-<p id="message"></p>
+    <p id="message"></p>
+  </div>
 
-<script>
-  document.getElementById("voteForm").addEventListener("submit", async (event) => {
-    event.preventDefault();
+  <script>
+    document.getElementById("voteForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
 
-    const voterCode = document.getElementById("voterCode").value;
-    const partyName = document.getElementById("party").value;
+      const voterCode = document.getElementById("voterCode").value;
+      const partyName = document.getElementById("party").value;
 
-    const response = await fetch("/api/vote", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ voterCode, partyName })
+      const response = await fetch("/api/vote", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ voterCode, partyName })
+      });
+
+      const result = await response.json();
+      document.getElementById("message").textContent = result.message || result.error;
     });
+  </script>
+</body>
+</html>
 
-    const result = await response.json();
-    document.getElementById("message").textContent = result.message || result.error;
-  });
-</script>
